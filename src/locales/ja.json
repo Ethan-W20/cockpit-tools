@@ -1082,6 +1082,7 @@
     "hideErrorDetails": "詳細を隠す",
     "autoUpdateFailedAfterRetries": "{{count}} 回試行しましたが自動更新に失敗しました。しばらくして再試行するか、手動でダウンロードしてください。",
     "updateCancelled": "更新をキャンセルしました。",
+    "cancelDownload": "ダウンロードをキャンセル",
     "installing": "インストール中...",
     "authorizing": "システム認証を待っています...",
     "installFailed": "システムへのインストールに失敗しました。後でもう一度試すか、手動でダウンロードしてください。",

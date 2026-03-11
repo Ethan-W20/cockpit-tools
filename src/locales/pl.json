@@ -1082,6 +1082,7 @@
     "hideErrorDetails": "Ukryj szczegóły",
     "autoUpdateFailedAfterRetries": "Automatyczna aktualizacja nie powiodła się po {{count}} próbach. Spróbuj ponownie później lub pobierz ręcznie.",
     "updateCancelled": "Aktualizacja została anulowana.",
+    "cancelDownload": "Anuluj pobieranie",
     "installing": "Instalowanie...",
     "authorizing": "Oczekiwanie na autoryzację systemu...",
     "installFailed": "Instalacja systemowa nie powiodła się. Spróbuj ponownie później lub pobierz pakiet ręcznie.",

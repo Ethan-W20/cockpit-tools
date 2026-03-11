@@ -1082,6 +1082,7 @@
     "hideErrorDetails": "Ayrıntıları gizle",
     "autoUpdateFailedAfterRetries": "Otomatik güncelleme {{count}} denemeden sonra başarısız oldu. Daha sonra tekrar deneyin veya manuel indirin.",
     "updateCancelled": "Güncelleme iptal edildi.",
+    "cancelDownload": "İndirmeyi iptal et",
     "installing": "Yükleniyor...",
     "authorizing": "Sistem yetkisi bekleniyor...",
     "installFailed": "Sistem kurulumu başarısız oldu. Daha sonra yeniden deneyin veya paketi manuel indirin.",

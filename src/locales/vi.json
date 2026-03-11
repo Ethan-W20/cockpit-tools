@@ -1082,6 +1082,7 @@
     "hideErrorDetails": "Ẩn chi tiết",
     "autoUpdateFailedAfterRetries": "Tự động cập nhật thất bại sau {{count}} lần thử. Hãy thử lại sau hoặc tải thủ công.",
     "updateCancelled": "Đã hủy cập nhật.",
+    "cancelDownload": "Hủy tải xuống",
     "installing": "Đang cài đặt...",
     "authorizing": "Đang chờ cấp quyền hệ thống...",
     "installFailed": "Cài đặt hệ thống thất bại. Hãy thử lại sau hoặc tải gói về thủ công.",

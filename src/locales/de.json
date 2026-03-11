@@ -1082,6 +1082,7 @@
     "hideErrorDetails": "Details ausblenden",
     "autoUpdateFailedAfterRetries": "Automatisches Update ist nach {{count}} Versuchen fehlgeschlagen. Bitte später erneut versuchen oder manuell herunterladen.",
     "updateCancelled": "Update wurde abgebrochen.",
+    "cancelDownload": "Download abbrechen",
     "installing": "Installation läuft...",
     "authorizing": "Warten auf Systemautorisierung...",
     "installFailed": "Die Systeminstallation ist fehlgeschlagen. Versuchen Sie es später erneut oder laden Sie das Paket manuell herunter.",

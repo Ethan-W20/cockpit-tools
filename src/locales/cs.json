@@ -1082,6 +1082,7 @@
     "hideErrorDetails": "Skrýt podrobnosti",
     "autoUpdateFailedAfterRetries": "Automatická aktualizace selhala i po {{count}} pokusech. Zkuste to později nebo stáhněte ručně.",
     "updateCancelled": "Aktualizace byla zrušena.",
+    "cancelDownload": "Zrušit stahování",
     "installing": "Instaluje se...",
     "authorizing": "Čeká se na autorizaci systému...",
     "installFailed": "Instalace do systému selhala. Zkuste to později nebo stáhněte balíček ručně.",

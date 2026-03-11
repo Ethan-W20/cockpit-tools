@@ -1082,6 +1082,7 @@
     "hideErrorDetails": "收起详情",
     "autoUpdateFailedAfterRetries": "自动更新失败，已重试 {{count}} 次。您可以稍后重试或手动下载安装。",
     "updateCancelled": "更新已取消。",
+    "cancelDownload": "取消下载",
     "installing": "安装中...",
     "authorizing": "等待系统授权安装...",
     "installFailed": "系统安装失败，请稍后重试或手动下载安装。",

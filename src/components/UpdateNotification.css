@@ -150,8 +150,14 @@
   margin: 4px 0;
 }
 
+.update-progress-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .update-progress-bar {
-  width: 100%;
+  flex: 1;
   height: 6px;
   border-radius: 3px;
   background: var(--bg-tertiary);
@@ -163,6 +169,25 @@
   border-radius: 3px;
   background: var(--gradient-primary);
   transition: width 0.3s ease;
+}
+
+.update-progress-cancel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+  color: var(--text-muted);
+  border-radius: 4px;
+  transition: color 0.15s ease, background 0.15s ease;
+  flex-shrink: 0;
+}
+
+.update-progress-cancel:hover {
+  color: var(--text-error, #ef4444);
+  background: var(--bg-error, rgba(239, 68, 68, 0.1));
 }
 
 .update-progress-text {

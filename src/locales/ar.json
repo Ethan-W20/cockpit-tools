@@ -1082,6 +1082,7 @@
     "hideErrorDetails": "إخفاء التفاصيل",
     "autoUpdateFailedAfterRetries": "فشل التحديث التلقائي بعد {{count}} محاولات. يمكنك المحاولة لاحقًا أو التنزيل يدويًا.",
     "updateCancelled": "تم إلغاء التحديث.",
+    "cancelDownload": "إلغاء التنزيل",
     "installing": "جارٍ التثبيت...",
     "authorizing": "بانتظار تفويض النظام...",
     "installFailed": "فشل التثبيت على النظام. حاول لاحقًا أو نزّل الحزمة يدويًا.",

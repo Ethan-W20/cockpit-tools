@@ -1082,6 +1082,7 @@
     "hideErrorDetails": "Masquer les détails",
     "autoUpdateFailedAfterRetries": "La mise à jour automatique a échoué après {{count}} tentatives. Réessayez plus tard ou téléchargez manuellement.",
     "updateCancelled": "Mise à jour annulée.",
+    "cancelDownload": "Annuler le téléchargement",
     "installing": "Installation en cours...",
     "authorizing": "En attente de l'autorisation système...",
     "installFailed": "L'installation système a échoué. Réessayez plus tard ou téléchargez le paquet manuellement.",

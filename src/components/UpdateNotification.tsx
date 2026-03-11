@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
-import { X, Download, Sparkles, RefreshCw, Check } from 'lucide-react';
+import { X, Download, Sparkles, RefreshCw, Check, XCircle } from 'lucide-react';
 import { getVersion } from '@tauri-apps/api/app';
 import { useTranslation } from 'react-i18next';
 import { openUrl } from '@tauri-apps/plugin-opener';
@@ -70,6 +70,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
   actionError = '',
   actionErrorDetails = '',
   onPrimaryAction,
+  onCancelUpdate,
 }) => {
   const { t, i18n } = useTranslation();
   const [updateInfo, setUpdateInfo] = useState<UpdateInfo | null>(null);
@@ -284,11 +285,23 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
 
           {isDownloading && (
             <div className="update-progress-container">
-              <div className="update-progress-bar">
-                <div
-                  className="update-progress-fill"
-                  style={{ width: `${clampedProgress}%` }}
-                />
+              <div className="update-progress-bar-row">
+                <div className="update-progress-bar">
+                  <div
+                    className="update-progress-fill"
+                    style={{ width: `${clampedProgress}%` }}
+                  />
+                </div>
+                {onCancelUpdate && (
+                  <button
+                    type="button"
+                    className="update-progress-cancel"
+                    onClick={onCancelUpdate}
+                    title={t('update_notification.cancelDownload', 'Cancel download')}
+                  >
+                    <XCircle size={16} />
+                  </button>
+                )}
               </div>
               <span className="update-progress-text">
                 {t('update_notification.downloading', 'Downloading...')} {clampedProgress}%

@@ -1082,6 +1082,7 @@
     "hideErrorDetails": "Nascondi dettagli",
     "autoUpdateFailedAfterRetries": "Aggiornamento automatico non riuscito dopo {{count}} tentativi. Riprova più tardi o scarica manualmente.",
     "updateCancelled": "Aggiornamento annullato.",
+    "cancelDownload": "Annulla download",
     "installing": "Installazione in corso...",
     "authorizing": "In attesa dell'autorizzazione di sistema...",
     "installFailed": "Installazione di sistema non riuscita. Riprova più tardi o scarica manualmente il pacchetto.",

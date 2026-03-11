@@ -1082,6 +1082,7 @@
     "hideErrorDetails": "Ocultar detalles",
     "autoUpdateFailedAfterRetries": "La actualización automática falló tras {{count}} intentos. Inténtalo más tarde o descarga manualmente.",
     "updateCancelled": "Actualización cancelada.",
+    "cancelDownload": "Cancelar descarga",
     "installing": "Instalando...",
     "authorizing": "Esperando autorización del sistema...",
     "installFailed": "La instalación del sistema falló. Inténtalo más tarde o descarga el paquete manualmente.",

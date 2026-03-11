@@ -1082,6 +1082,7 @@
     "hideErrorDetails": "Hide details",
     "autoUpdateFailedAfterRetries": "Auto-update failed after {{count}} attempts. Try again later or download manually.",
     "updateCancelled": "Update canceled.",
+    "cancelDownload": "Cancel download",
     "installing": "Installing...",
     "authorizing": "Waiting for system authorization...",
     "installFailed": "System installation failed. Try again later or download manually.",

@@ -1082,6 +1082,7 @@
     "hideErrorDetails": "상세 숨기기",
     "autoUpdateFailedAfterRetries": "{{count}}회 시도 후에도 자동 업데이트에 실패했습니다. 잠시 후 다시 시도하거나 수동으로 다운로드하세요.",
     "updateCancelled": "업데이트가 취소되었습니다.",
+    "cancelDownload": "다운로드 취소",
     "installing": "설치 중...",
     "authorizing": "시스템 권한 승인을 기다리는 중...",
     "installFailed": "시스템 설치에 실패했습니다. 나중에 다시 시도하거나 수동으로 다운로드하세요.",
