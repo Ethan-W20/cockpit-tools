@@ -1777,18 +1777,13 @@ export function useProviderAccountsPage<TAccount extends ProviderAccountBase>(
     oauthLoginIdRef.current = null;
     oauthActiveRef.current = false;
     oauthCompletingRef.current = false;
-    setOauthUrl(null);
-    setOauthCallbackUrl(null);
-    setOauthUrlCopied(false);
-    setOauthUserCode(null);
-    setOauthUserCodeCopied(false);
-    setOauthMeta(null);
     setOauthPrepareError(null);
     setOauthCompleteError(null);
     setOauthTimedOut(false);
     setOauthPolling(false);
     setOauthManualCallbackSubmitting(false);
     setOauthManualCallbackError(null);
+    // 延迟清理 OAuth UI 状态，避免弹框内容闪烁（先消失再出现成功提示）
     setTimeout(() => {
       setShowAddModal(false);
       resetAddModalState();
@@ -1916,8 +1911,9 @@ export function useProviderAccountsPage<TAccount extends ProviderAccountBase>(
   // Auto-prepare OAuth when modal opens on oauth tab
   useEffect(() => {
     if (!showAddModal || !oauthTabKeys.includes(addTab) || oauthUrl) return;
+    if (addStatus !== 'idle') return;
     prepareOauthUrl();
-  }, [showAddModal, addTab, oauthUrl, prepareOauthUrl, oauthTabKeys]);
+  }, [showAddModal, addTab, oauthUrl, prepareOauthUrl, oauthTabKeys, addStatus]);
 
   // Cancel OAuth when modal closes or tab changes
   useEffect(() => {

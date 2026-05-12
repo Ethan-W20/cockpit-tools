@@ -292,8 +292,27 @@ fn wait_for_oauth_code_blocking(
     expected_state: String,
     expires_at: i64,
 ) -> Result<String, String> {
-    let server = Server::http(format!("127.0.0.1:{}", callback_port))
-        .map_err(|e| format!("启动 Gemini OAuth 回调监听失败: {}", e))?;
+    // Windows 上端口释放后可能短暂处于 TIME_WAIT，重试几次避免 OS error 10048
+    let server = {
+        let addr = format!("127.0.0.1:{}", callback_port);
+        let mut last_err = String::new();
+        let mut bound = None;
+        for attempt in 0..5 {
+            match Server::http(&addr) {
+                Ok(s) => {
+                    bound = Some(s);
+                    break;
+                }
+                Err(e) => {
+                    last_err = format!("{}", e);
+                    if attempt < 4 {
+                        std::thread::sleep(Duration::from_millis(300));
+                    }
+                }
+            }
+        }
+        bound.ok_or_else(|| format!("启动 Gemini OAuth 回调监听失败: {}", last_err))?
+    };
 
     loop {
         if now_timestamp() > expires_at {
@@ -437,17 +456,21 @@ pub async fn start_login() -> Result<GeminiOAuthStartResponse, String> {
     hydrate_pending_login_if_missing();
     if let Some(existing) = get_pending_login() {
         if existing.expires_at > now_timestamp() && !existing.cancelled {
-            logger::log_info(&format!(
-                "[Gemini OAuth] 复用登录会话: login_id={}",
-                existing.login_id
-            ));
-            return Ok(GeminiOAuthStartResponse {
-                login_id: existing.login_id,
-                verification_uri: existing.auth_url,
-                expires_in: (existing.expires_at - now_timestamp()).max(0) as u64,
-                interval_seconds: OAUTH_POLL_INTERVAL_SECONDS,
-                callback_url: Some(existing.callback_url),
-            });
+            // 验证旧端口是否仍可用（避免复用 TIME_WAIT 中的端口）
+            if std::net::TcpListener::bind(("127.0.0.1", existing.callback_port)).is_ok() {
+                logger::log_info(&format!(
+                    "[Gemini OAuth] 复用登录会话: login_id={}",
+                    existing.login_id
+                ));
+                return Ok(GeminiOAuthStartResponse {
+                    login_id: existing.login_id,
+                    verification_uri: existing.auth_url,
+                    expires_in: (existing.expires_at - now_timestamp()).max(0) as u64,
+                    interval_seconds: OAUTH_POLL_INTERVAL_SECONDS,
+                    callback_url: Some(existing.callback_url),
+                });
+            }
+            logger::log_info("[Gemini OAuth] 旧会话端口不可用，重新创建登录会话");
         }
     }
     set_pending_login(None);
