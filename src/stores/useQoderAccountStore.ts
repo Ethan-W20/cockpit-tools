@@ -40,6 +40,7 @@ export const useQoderAccountStore = createProviderAccountStore<QoderAccount>(
   },
   {
     platformId: 'qoder',
+    silentMutationRefresh: true,
     currentAccountIdKey: QODER_CURRENT_ACCOUNT_ID_KEY,
     // 通用 store 的单值当前账号固定为国际 IDE；其他变体从后端映射读取。
     acceptEmptyCurrentAccountId: true,

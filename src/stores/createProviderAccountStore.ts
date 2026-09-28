@@ -47,6 +47,8 @@ type ProviderMapper<TAccount> = {
 
 type ProviderStoreOptions = {
   platformId: PlatformId;
+  /** 单账号操作完成后静默读取权威列表，避免整页加载动画。 */
+  silentMutationRefresh?: boolean;
   currentAccountIdKey?: string;
   resolveCurrentAccountId?: () => Promise<string | null>;
   /** 后端可能合法返回 null（如关闭「切号同步官方登录」），允许清空当前账号。 */
@@ -63,7 +65,7 @@ export interface ProviderAccountStoreState<TAccount> {
   error: string | null;
   fetchCurrentAccountId: () => Promise<string | null>;
   setCurrentAccountId: (accountId: string | null) => void;
-  fetchAccounts: (options?: { allowEmpty?: boolean }) => Promise<void>;
+  fetchAccounts: (options?: { allowEmpty?: boolean; silent?: boolean }) => Promise<void>;
   switchAccount: (accountId: string) => Promise<void>;
   deleteAccounts: (accountIds: string[]) => Promise<void>;
   refreshToken: (accountId: string) => Promise<void>;
@@ -269,7 +271,7 @@ export function createProviderAccountStore<TAccount extends ProviderAccountAugme
 
     fetchAccounts: async (requestOptions) => {
       const requestId = ++fetchAccountsSeq.current;
-      set({ loading: true, error: null });
+      set(requestOptions?.silent ? { error: null } : { loading: true, error: null });
       try {
         const accounts = await service.listAccounts();
         if (requestId !== fetchAccountsSeq.current) {
@@ -370,16 +372,20 @@ export function createProviderAccountStore<TAccount extends ProviderAccountAugme
     },
 
     refreshToken: async (accountId: string) => {
-      let error: unknown;
       try {
         await service.refreshToken(accountId);
-      } catch (err) {
-        error = err;
-      }
-      await get().fetchAccounts();
-      if (error) {
+      } catch (error) {
+        // 后端失败前可能已经持久化重登标记或部分刷新结果。
+        try {
+          await get().fetchAccounts({ silent: options.silentMutationRefresh });
+        } catch (refreshError) {
+          console.error(`[Provider Store] Failed to reload accounts after refresh error for ${cacheKey}:`, refreshError);
+        }
         throw error;
       }
+      // 命令快照可能早于并发标签/额度写入；统一读取后端最新状态，
+      // 并复用 fetchAccounts 的请求序号，阻止更早的列表响应覆盖结果。
+      await get().fetchAccounts({ silent: options.silentMutationRefresh });
     },
 
     refreshAllTokens: async () => {
@@ -413,7 +419,7 @@ export function createProviderAccountStore<TAccount extends ProviderAccountAugme
 
     updateAccountTags: async (accountId: string, tags: string[]) => {
       const account = await service.updateAccountTags(accountId, tags);
-      await get().fetchAccounts();
+      await get().fetchAccounts({ silent: options.silentMutationRefresh });
       return account;
     },
   }));
