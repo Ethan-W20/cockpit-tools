@@ -14,6 +14,7 @@ import * as traeService from './traeService';
 import * as workbuddyService from './workbuddyService';
 import * as zedService from './zedService';
 import type { ClaudeAccount } from '../types/claude';
+import { QoderVariantId, getQoderAccountVariantId } from '../types/qoder';
 
 type AccountWithId = { id: string };
 
@@ -27,6 +28,14 @@ async function listClaudeManagerTransferAccounts(): Promise<AccountWithId[]> {
     seen.add(account.id);
     return true;
   });
+}
+
+/** Qoder 四变体各自是独立平台键，按变体切分，避免备份/导入时同一账号重复出现。 */
+async function listQoderVariantAccounts(variant: QoderVariantId): Promise<AccountWithId[]> {
+  const accounts = await qoderService.listQoderAccounts();
+  return accounts
+    .filter((account) => getQoderAccountVariantId(account) === variant)
+    .map((account) => ({ id: account.id }));
 }
 
 interface TransferAdapter {
@@ -94,9 +103,24 @@ const PLATFORM_ADAPTERS: Partial<Record<PlatformId, TransferAdapter>> = {
     importFromJson: codebuddyCnService.importCodebuddyCnFromJson,
   },
   qoder: {
-    listAccounts: qoderService.listQoderAccounts,
-    exportAccounts: qoderService.exportQoderAccounts,
-    importFromJson: qoderService.importQoderFromJson,
+    listAccounts: () => listQoderVariantAccounts('qoder'),
+    exportAccounts: (accountIds) => qoderService.exportQoderAccounts(accountIds, true),
+    importFromJson: (jsonContent) => qoderService.importQoderFromJson(jsonContent, 'qoder'),
+  },
+  qoder_app: {
+    listAccounts: () => listQoderVariantAccounts('qoder_app'),
+    exportAccounts: (accountIds) => qoderService.exportQoderAccounts(accountIds, true),
+    importFromJson: (jsonContent) => qoderService.importQoderFromJson(jsonContent, 'qoder_app'),
+  },
+  qoder_cn_ide: {
+    listAccounts: () => listQoderVariantAccounts('qoder_cn_ide'),
+    exportAccounts: (accountIds) => qoderService.exportQoderAccounts(accountIds, true),
+    importFromJson: (jsonContent) => qoderService.importQoderFromJson(jsonContent, 'qoder_cn_ide'),
+  },
+  qoder_cn_app: {
+    listAccounts: () => listQoderVariantAccounts('qoder_cn_app'),
+    exportAccounts: (accountIds) => qoderService.exportQoderAccounts(accountIds, true),
+    importFromJson: (jsonContent) => qoderService.importQoderFromJson(jsonContent, 'qoder_cn_app'),
   },
   zcode: {
     listAccounts: zcodeService.listZcodeAccounts,

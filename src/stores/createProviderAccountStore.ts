@@ -39,6 +39,7 @@ type ProviderService<TAccount> = {
 };
 
 type ProviderMapper<TAccount> = {
+  getAccountPlatformId?: (account: TAccount) => PlatformId;
   getDisplayEmail: (account: TAccount) => string;
   getPlanBadge: (account: TAccount) => string;
   getUsage: (account: TAccount) => ProviderUsage;
@@ -62,7 +63,7 @@ export interface ProviderAccountStoreState<TAccount> {
   error: string | null;
   fetchCurrentAccountId: () => Promise<string | null>;
   setCurrentAccountId: (accountId: string | null) => void;
-  fetchAccounts: () => Promise<void>;
+  fetchAccounts: (options?: { allowEmpty?: boolean }) => Promise<void>;
   switchAccount: (accountId: string) => Promise<void>;
   deleteAccounts: (accountIds: string[]) => Promise<void>;
   refreshToken: (accountId: string) => Promise<void>;
@@ -89,6 +90,15 @@ export function createProviderAccountStore<TAccount extends ProviderAccountAugme
   let allowNextEmptyCurrentAccountId = false;
   let fetchAccountsSeq = { current: 0 };
   let fetchCurrentAccountSeq = 0;
+
+  const resolveChangedPlatformIds = (accounts: TAccount[], accountIds: string[]): PlatformId[] => {
+    if (!mapper.getAccountPlatformId) return [options.platformId];
+    const platformIds = new Set<PlatformId>();
+    for (const account of accounts) {
+      if (accountIds.includes(account.id)) platformIds.add(mapper.getAccountPlatformId(account));
+    }
+    return platformIds.size > 0 ? [...platformIds] : [options.platformId];
+  };
 
   const loadCachedAccounts = (): TAccount[] => {
     try {
@@ -257,7 +267,7 @@ export function createProviderAccountStore<TAccount extends ProviderAccountAugme
       persistCurrentAccountId(currentAccountId);
     },
 
-    fetchAccounts: async () => {
+    fetchAccounts: async (requestOptions) => {
       const requestId = ++fetchAccountsSeq.current;
       set({ loading: true, error: null });
       try {
@@ -265,7 +275,7 @@ export function createProviderAccountStore<TAccount extends ProviderAccountAugme
         if (requestId !== fetchAccountsSeq.current) {
           return;
         }
-        if (accounts.length === 0 && get().accounts.length > 0 && !allowNextEmptyAccountList) {
+        if (accounts.length === 0 && get().accounts.length > 0 && !allowNextEmptyAccountList && !requestOptions?.allowEmpty) {
           console.warn(`[Provider Store] 忽略异常空账号列表，保留本地缓存: ${cacheKey}`);
           set({ loading: false });
           return;
@@ -297,6 +307,7 @@ export function createProviderAccountStore<TAccount extends ProviderAccountAugme
       allowNextEmptyCurrentAccountId = previousCurrentAccountId
         ? deleteIdSet.has(previousCurrentAccountId)
         : false;
+      const changedPlatformIds = resolveChangedPlatformIds(get().accounts, accountIds);
       try {
         if (accountIds.length === 1) {
           await service.deleteAccount(accountIds[0]);
@@ -304,10 +315,12 @@ export function createProviderAccountStore<TAccount extends ProviderAccountAugme
           await service.deleteAccounts(accountIds);
         }
         await get().fetchAccounts();
-        await emitAccountsChanged({
-          platformId: options.platformId,
-          reason: 'delete',
-        });
+        for (const platformId of changedPlatformIds) {
+          await emitAccountsChanged({
+            platformId,
+            reason: 'delete',
+          });
+        }
         const nextCurrentAccountId = get().currentAccountId;
         if (previousCurrentAccountId !== nextCurrentAccountId) {
           await emitCurrentAccountChanged({
@@ -323,7 +336,23 @@ export function createProviderAccountStore<TAccount extends ProviderAccountAugme
     },
 
     switchAccount: async (accountId: string) => {
-      await service.injectAccount(accountId);
+      const account = get().accounts.find((item) => item.id === accountId);
+      const platformId = account && mapper.getAccountPlatformId
+        ? mapper.getAccountPlatformId(account)
+        : options.platformId;
+      try {
+        await service.injectAccount(accountId);
+      } catch (error) {
+        // 多变体切号可能已写入登录态，但后续启动失败。重新读取实际状态，不广播成功。
+        if (mapper.getAccountPlatformId) {
+          try {
+            await get().fetchAccounts();
+          } catch (refreshError) {
+            console.error(`[Provider Store] Failed to refresh accounts after switch error for ${cacheKey}:`, refreshError);
+          }
+        }
+        throw error;
+      }
       // acceptEmpty：以后端为准（如 Grok 关闭「切号同步官方登录」时无当前账号）。
       // 其他平台仍乐观写入当前账号，再拉取列表/状态。
       if (acceptEmptyCurrentAccountId && hasCurrentAccountResolver) {
@@ -334,8 +363,8 @@ export function createProviderAccountStore<TAccount extends ProviderAccountAugme
         await get().fetchAccounts();
       }
       await emitCurrentAccountChanged({
-        platformId: options.platformId,
-        accountId: get().currentAccountId,
+        platformId,
+        accountId: platformId === options.platformId ? get().currentAccountId : accountId,
         reason: 'switch',
       });
     },
@@ -369,10 +398,12 @@ export function createProviderAccountStore<TAccount extends ProviderAccountAugme
     importFromJson: async (jsonContent: string) => {
       const accounts = await service.importFromJson(jsonContent);
       await get().fetchAccounts();
-      await emitAccountsChanged({
-        platformId: options.platformId,
-        reason: 'import',
-      });
+      for (const platformId of resolveChangedPlatformIds(accounts, accounts.map((account) => account.id))) {
+        await emitAccountsChanged({
+          platformId,
+          reason: 'import',
+        });
+      }
       return accounts;
     },
 

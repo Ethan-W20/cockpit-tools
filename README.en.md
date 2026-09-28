@@ -223,13 +223,14 @@ Manage CodeBuddy CN instances with isolated profiles and lifecycle controls.
 ### 11. Qoder Account Management
 
 - **Account Import**: supports local import and JSON import
+- **Official Client Login**: available in the add-account dialog. IDE variants use a temporary blank instance, import its credentials, then close and clean it without changing the default instance's current account. App variants observe sign-in in the current official client and keep the new account signed in; cancel only stops monitoring. An existing App session must switch accounts or wait for sign-out detection before signing in again; background renewal does not count as a new login. If previous credentials cannot be read, the client still opens; sign out and wait for sign-out detection before signing in again. Code integration is complete; live authorization, credential reading, and cleanup have not been verified
 - **Quota View**: shows Credits usage, remaining credits, and raw plan values
 - **Batch Operations**: supports tags, filters, export, and batch delete/refresh
 - **Switch Injection**: supports injecting and launching Qoder after account switch
 
 #### 10.1 Qoder Multi-Instance
 
-Manage Qoder instances with isolated profiles and lifecycle controls.
+Qoder IDE and Qoder CN IDE support multi-account multi-instance parallel runs (instances are managed per variant). Qoder and Qoder CN (App versions) are limited by the official client's single-instance mechanism and cannot run multiple sessions at the same time; use account switching instead.
 
 - **Isolated Profiles**: each instance uses its own user data directory
 - **Quick Lifecycle**: start/stop/force stop instances
