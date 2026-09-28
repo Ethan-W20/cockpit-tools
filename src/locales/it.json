@@ -141,6 +141,7 @@
     },
     "confirm": "Conferma",
     "cancel": "Annulla",
+    "stop": "Interrompi",
     "cancelling": "Annullamento...",
     "cancelled": "Annullato",
     "save": "Salva",
@@ -6328,6 +6329,32 @@
     },
     "empty": {
       "desc": "Fai clic su \"Aggiungi account\" per usare login auth, import locale o import JSON."
+    },
+    "claimReward": {
+      "buttonTitle": "Richiedi 100 crediti giornalieri",
+      "batchTitle": "Richiedi in blocco 100 crediti giornalieri",
+      "modalTitle": "Riscatta 100 crediti giornalieri",
+      "modalDesc": "Riscatta in blocco il premio giornaliero di 100 crediti per gli account selezionati.",
+      "selectAll": "Seleziona tutto",
+      "selectedCount": "{{selected}} di {{total}} account selezionati",
+      "claiming": "Richiesta in corso...",
+      "statusPending": "In attesa",
+      "statusAlreadyClaimed": "Già riscattato oggi",
+      "statusFailed": "Non riuscito",
+      "batchFinishedSummary": "Completato: {{success}} riusciti, {{already}} già riscattati, {{failed}} non riusciti",
+      "reclaim": "Richiedi di nuovo",
+      "startClaim": "Riscatta tutto",
+      "claimSuccess": "L'account {{email}} ha riscattato con successo {{amount}} crediti!",
+      "alreadyClaimed": "L'account {{email}} ha già riscattato i crediti oggi",
+      "claimFailed": "Impossibile riscattare i crediti per l'account {{email}}: {{error}}",
+      "badgeClaimable": "100 disponibili",
+      "badgeClaimed": "100 riscattati",
+      "statusClaimableTip": "I 100 crediti giornalieri sono disponibili oggi",
+      "statusClaimedTip": "I 100 crediti giornalieri sono già stati riscattati oggi",
+      "statusNone": "Nessuna campagna",
+      "badgeNone": "Nessuna campagna",
+      "statusNoneTip": "Nessuna campagna attiva per questo account",
+      "alreadyClaimedTip": "I 100 crediti giornalieri sono già stati riscattati oggi"
     }
   },
   "trae": {

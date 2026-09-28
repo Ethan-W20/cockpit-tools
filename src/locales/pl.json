@@ -141,6 +141,7 @@
     },
     "confirm": "Potwierdź",
     "cancel": "Anuluj",
+    "stop": "Zatrzymaj",
     "cancelling": "Anulowanie...",
     "cancelled": "Anulowano",
     "save": "Zapisz",
@@ -6328,6 +6329,32 @@
     },
     "empty": {
       "desc": "Kliknij Dodaj konto, aby użyć logowania auth, importu lokalnego lub importu JSON."
+    },
+    "claimReward": {
+      "buttonTitle": "Odbierz codzienne 100 kredytów",
+      "batchTitle": "Zbiorczo odbierz codzienne 100 kredytów",
+      "modalTitle": "Odbiór codziennych 100 kredytów",
+      "modalDesc": "Odbierz zbiorczo nagrodę 100 kredytów dziennie dla wybranych kont.",
+      "selectAll": "Zaznacz wszystko",
+      "selectedCount": "Wybrano {{selected}} z {{total}} kont",
+      "claiming": "Odbieranie...",
+      "statusPending": "Oczekuje",
+      "statusAlreadyClaimed": "Dzisiaj już odebrano",
+      "statusFailed": "Niepowodzenie",
+      "batchFinishedSummary": "Zakończono: {{success}} powiodło się, {{already}} już odebrano, {{failed}} nie powiodło się",
+      "reclaim": "Odbierz ponownie",
+      "startClaim": "Odbierz wszystko",
+      "claimSuccess": "Konto {{email}} pomyślnie odebrało {{amount}} kredytów!",
+      "alreadyClaimed": "Konto {{email}} już dzisiaj odebrało kredyty",
+      "claimFailed": "Nie udało się odebrać kredytów dla konta {{email}}: {{error}}",
+      "badgeClaimable": "100 do odebrania",
+      "badgeClaimed": "100 odebrano",
+      "statusClaimableTip": "Możesz dziś odebrać 100 dziennych kredytów",
+      "statusClaimedTip": "Dzisiejsze 100 dziennych kredytów zostało już odebrane",
+      "statusNone": "Brak kampanii",
+      "badgeNone": "Brak kampanii",
+      "statusNoneTip": "Brak aktywnej kampanii dla tego konta",
+      "alreadyClaimedTip": "Dzisiejsze 100 dziennych kredytów zostało już odebrane"
     }
   },
   "trae": {

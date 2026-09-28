@@ -141,6 +141,7 @@
     },
     "confirm": "確認",
     "cancel": "キャンセル",
+    "stop": "停止",
     "cancelling": "キャンセル中...",
     "cancelled": "キャンセル済み",
     "save": "保存",
@@ -6328,6 +6329,32 @@
     },
     "empty": {
       "desc": "「アカウントを追加」をクリックすると、認証ログイン、ローカルインポート、または JSON インポートを利用できます。"
+    },
+    "claimReward": {
+      "buttonTitle": "デイリー100クレジットを獲得",
+      "batchTitle": "デイリー100クレジットを一括獲得",
+      "modalTitle": "デイリー 100 クレジット一括獲得",
+      "modalDesc": "選択したアカウントのデイリーキャンペーン 100 クレジット報酬を一括で獲得します。",
+      "selectAll": "すべて選択",
+      "selectedCount": "{{selected}} / {{total}} 個のアカウントを選択中",
+      "claiming": "獲得中...",
+      "statusPending": "未獲得",
+      "statusAlreadyClaimed": "本日獲得済み",
+      "statusFailed": "失敗",
+      "batchFinishedSummary": "完了: 成功 {{success}}、本日受取済 {{already}}、失敗 {{failed}}",
+      "reclaim": "再試行",
+      "startClaim": "一括獲得",
+      "claimSuccess": "アカウント {{email}} が {{amount}} クレジットを正常に獲得しました！",
+      "alreadyClaimed": "アカウント {{email}} は本日すでにクレジットを獲得しています",
+      "claimFailed": "アカウント {{email}} のクレジット獲得に失敗しました: {{error}}",
+      "badgeClaimable": "100 獲得可能",
+      "badgeClaimed": "100 獲得済み",
+      "statusClaimableTip": "本日のデイリー100クレジットを獲得できます",
+      "statusClaimedTip": "本日のデイリー100クレジットは獲得済みです",
+      "statusNone": "キャンペーンなし",
+      "badgeNone": "キャンペーンなし",
+      "statusNoneTip": "このアカウントで利用可能なキャンペーンはありません",
+      "alreadyClaimedTip": "本日のデイリー100クレジットは獲得済みです"
     }
   },
   "trae": {

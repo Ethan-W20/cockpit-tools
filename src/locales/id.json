@@ -141,6 +141,7 @@
     },
     "confirm": "Konfirmasi",
     "cancel": "Batal",
+    "stop": "Hentikan",
     "cancelling": "Membatalkan...",
     "cancelled": "Dibatalkan",
     "save": "Simpan",
@@ -6375,6 +6376,32 @@
     },
     "empty": {
       "desc": "Klik \"Tambah Akun\" untuk menggunakan login auth, import lokal, atau import JSON."
+    },
+    "claimReward": {
+      "buttonTitle": "Klaim 100 kredit harian",
+      "batchTitle": "Klaim massal 100 kredit harian",
+      "modalTitle": "Klaim 100 Kredit Harian",
+      "modalDesc": "Klaim hadiah kampanye 100 kredit harian untuk akun yang dipilih.",
+      "selectAll": "Pilih Semua",
+      "selectedCount": "{{selected}} dari {{total}} akun dipilih",
+      "claiming": "Mengklaim...",
+      "statusPending": "Menunggu",
+      "statusAlreadyClaimed": "Sudah diklaim hari ini",
+      "statusFailed": "Gagal",
+      "batchFinishedSummary": "Selesai: {{success}} berhasil, {{already}} sudah diklaim, {{failed}} gagal",
+      "reclaim": "Klaim Lagi",
+      "startClaim": "Klaim Semua",
+      "claimSuccess": "Akun {{email}} berhasil mengklaim {{amount}} kredit!",
+      "alreadyClaimed": "Akun {{email}} sudah mengklaim kredit hari ini",
+      "claimFailed": "Gagal mengklaim kredit untuk {{email}}: {{error}}",
+      "badgeClaimable": "100 tersedia",
+      "badgeClaimed": "100 diklaim",
+      "statusClaimableTip": "100 kredit harian tersedia untuk diklaim hari ini",
+      "statusClaimedTip": "100 kredit harian sudah diklaim hari ini",
+      "statusNone": "Tidak ada kampanye",
+      "badgeNone": "Tidak ada kampanye",
+      "statusNoneTip": "Tidak ada kampanye aktif untuk akun ini",
+      "alreadyClaimedTip": "100 kredit harian sudah diklaim hari ini"
     }
   },
   "zcode": {

@@ -141,6 +141,7 @@
     },
     "confirm": "Confirm",
     "cancel": "Cancel",
+    "stop": "Stop",
     "cancelling": "Cancelling...",
     "cancelled": "Cancelled",
     "save": "Save",
@@ -6570,6 +6571,32 @@
     },
     "empty": {
       "desc": "Click \"Add Account\" to use auth login, local import, or JSON import."
+    },
+    "claimReward": {
+      "buttonTitle": "Claim daily 100 credits",
+      "batchTitle": "Batch claim daily 100 credits",
+      "modalTitle": "Claim Daily 100 Credits",
+      "modalDesc": "Batch claim the daily 100 credits campaign reward for selected accounts.",
+      "selectAll": "Select All",
+      "selectedCount": "{{selected}} of {{total}} accounts selected",
+      "claiming": "Claiming...",
+      "statusPending": "Pending",
+      "statusAlreadyClaimed": "Already claimed today",
+      "statusFailed": "Failed",
+      "batchFinishedSummary": "Finished: {{success}} succeeded, {{already}} already claimed, {{failed}} failed",
+      "reclaim": "Claim Again",
+      "startClaim": "Claim All",
+      "claimSuccess": "Account {{email}} successfully claimed {{amount}} credits!",
+      "alreadyClaimed": "Account {{email}} has already claimed credits today",
+      "claimFailed": "Failed to claim credits for {{email}}: {{error}}",
+      "badgeClaimable": "100 Available",
+      "badgeClaimed": "100 Claimed",
+      "statusClaimableTip": "Daily 100 credits available today",
+      "statusClaimedTip": "Daily 100 credits already claimed today",
+      "statusNone": "No Campaign",
+      "badgeNone": "No Campaign",
+      "statusNoneTip": "No active campaign for this account",
+      "alreadyClaimedTip": "Daily 100 credits already claimed today"
     }
   },
   "zcode": {

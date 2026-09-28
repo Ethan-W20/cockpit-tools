@@ -141,6 +141,7 @@
     },
     "confirm": "Potvrdit",
     "cancel": "Zrušit",
+    "stop": "Zastavit",
     "cancelling": "Rušení...",
     "cancelled": "Zrušeno",
     "save": "Uložit",
@@ -6328,6 +6329,32 @@
     },
     "empty": {
       "desc": "Klikněte na Přidat účet a použijte přihlášení, lokální import nebo import JSON."
+    },
+    "claimReward": {
+      "buttonTitle": "Získat denních 100 kreditů",
+      "batchTitle": "Hromadně získat denních 100 kreditů",
+      "modalTitle": "Získání denních 100 kreditů",
+      "modalDesc": "Hromadně získat denní odměnu 100 kreditů pro vybrané účty.",
+      "selectAll": "Vybrat vše",
+      "selectedCount": "Vybráno {{selected}} z {{total}} účtů",
+      "claiming": "Získávání...",
+      "statusPending": "Čeká se",
+      "statusAlreadyClaimed": "Dnes již získáno",
+      "statusFailed": "Selhalo",
+      "batchFinishedSummary": "Dokončeno: {{success}} úspěšně, {{already}} již získáno, {{failed}} selhalo",
+      "reclaim": "Zkusit znovu",
+      "startClaim": "Získat vše",
+      "claimSuccess": "Účet {{email}} úspěšně získal {{amount}} kreditů!",
+      "alreadyClaimed": "Účet {{email}} již dnes kredity získal",
+      "claimFailed": "Nepodařilo se získat kredity pro účet {{email}}: {{error}}",
+      "badgeClaimable": "100 k vyzvednutí",
+      "badgeClaimed": "100 vyzvednuto",
+      "statusClaimableTip": "Dnes si můžete vyzvednout 100 denních kreditů",
+      "statusClaimedTip": "Dnešních 100 denních kreditů již bylo vyzvednuto",
+      "statusNone": "Žádná akce",
+      "badgeNone": "Žádná akce",
+      "statusNoneTip": "Pro tento účet není dostupná žádná aktivní akce",
+      "alreadyClaimedTip": "Dnešních 100 denních kreditů již bylo vyzvednuto"
     }
   },
   "trae": {

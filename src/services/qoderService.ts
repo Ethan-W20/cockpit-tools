@@ -182,3 +182,39 @@ export async function updateQoderAccountTags(
 export async function getQoderAccountsIndexPath(): Promise<string> {
   return await invoke('get_qoder_accounts_index_path');
 }
+
+export interface QoderClaimRewardResult {
+  accountId: string;
+  success: boolean;
+  replayed: boolean;
+  amount?: number;
+  message: string;
+  account?: QoderAccount;
+}
+
+export async function claimQoderReward(accountId: string): Promise<QoderClaimRewardResult> {
+  return await invoke('claim_qoder_reward', { accountId });
+}
+
+export async function checkQoderRewardStatus(accountId: string): Promise<QoderAccount> {
+  return await invoke('check_qoder_reward_status', { accountId });
+}
+
+export async function batchCheckQoderRewardStatuses(accountIds: string[]): Promise<QoderAccount[]> {
+  return await invoke('batch_check_qoder_reward_statuses', { accountIds });
+}
+
+export async function openQoderWebview(accountId: string): Promise<void> {
+  return await invoke('open_qoder_webview', { accountId });
+}
+
+export async function closeQoderWebview(accountId: string): Promise<void> {
+  return await invoke('close_qoder_webview', { accountId });
+}
+
+export async function bindQoderWebCookie(
+  accountId: string,
+  cookie: string,
+): Promise<QoderAccount> {
+  return await invoke('bind_qoder_web_cookie', { accountId, cookie });
+}

@@ -141,6 +141,7 @@
     },
     "confirm": "Bestätigen",
     "cancel": "Abbrechen",
+    "stop": "Stoppen",
     "cancelling": "Wird abgebrochen...",
     "cancelled": "Abgebrochen",
     "save": "Speichern",
@@ -6328,6 +6329,32 @@
     },
     "empty": {
       "desc": "Klicken Sie auf Konto hinzufügen, um die Anmeldung, den lokalen Import oder den JSON-Import zu verwenden."
+    },
+    "claimReward": {
+      "buttonTitle": "Tägliche 100 Credits anfordern",
+      "batchTitle": "Tägliche 100 Credits stapelweise anfordern",
+      "modalTitle": "Tägliche 100 Credits abholen",
+      "modalDesc": "Holen Sie die tägliche Belohnung von 100 Credits für ausgewählte Konten ab.",
+      "selectAll": "Alle auswählen",
+      "selectedCount": "{{selected}} von {{total}} Konten ausgewählt",
+      "claiming": "Wird angefordert...",
+      "statusPending": "Ausstehend",
+      "statusAlreadyClaimed": "Heute bereits abgeholt",
+      "statusFailed": "Fehlgeschlagen",
+      "batchFinishedSummary": "Abgeschlossen: {{success}} erfolgreich, {{already}} bereits abgeholt, {{failed}} fehlgeschlagen",
+      "reclaim": "Erneut anfordern",
+      "startClaim": "Alle anfordern",
+      "claimSuccess": "Konto {{email}} hat erfolgreich {{amount}} Credits erhalten!",
+      "alreadyClaimed": "Konto {{email}} hat die Credits heute bereits abgeholt",
+      "claimFailed": "Credits für Konto {{email}} konnten nicht abgeholt werden: {{error}}",
+      "badgeClaimable": "100 verfügbar",
+      "badgeClaimed": "100 abgeholt",
+      "statusClaimableTip": "Die täglichen 100 Credits können heute abgeholt werden",
+      "statusClaimedTip": "Die täglichen 100 Credits wurden heute bereits abgeholt",
+      "statusNone": "Keine Aktion",
+      "badgeNone": "Keine Aktion",
+      "statusNoneTip": "Für dieses Konto gibt es keine aktive Aktion",
+      "alreadyClaimedTip": "Die täglichen 100 Credits wurden heute bereits abgeholt"
     }
   },
   "trae": {

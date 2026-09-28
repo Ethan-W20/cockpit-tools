@@ -413,7 +413,7 @@ fn refresh_summary(index: &mut QoderAccountIndex, account: &QoderAccount) {
     index.accounts.push(account.summary());
 }
 
-fn upsert_account_record(account: QoderAccount) -> Result<QoderAccount, String> {
+pub fn upsert_account_record(account: QoderAccount) -> Result<QoderAccount, String> {
     let _lock = QODER_ACCOUNT_INDEX_LOCK
         .lock()
         .map_err(|_| "获取 Qoder 账号锁失败".to_string())?;
@@ -463,6 +463,39 @@ fn update_last_used(account_id: &str) -> Result<QoderAccount, String> {
         .ok_or_else(|| format!("Qoder 账号不存在: {}", account_id))
 }
 
+/// 在账号锁内读取最新记录，只写活动字段；查询传入请求前的快照以拒绝过期响应。
+/// 领取结果不传快照，但同样保留最新凭证和配额，并向调用方传播保存错误。
+pub fn update_reward_status(
+    account_id: &str,
+    claim_status: Option<String>,
+    window_end_at: Option<i64>,
+    expected: Option<&QoderAccount>,
+) -> Result<QoderAccount, String> {
+    let _lock = QODER_ACCOUNT_INDEX_LOCK
+        .lock()
+        .map_err(|_| "获取 Qoder 账号锁失败".to_string())?;
+    let mut index = load_account_index();
+    let mut account = load_account(account_id)
+        .ok_or_else(|| format!("Qoder 账号不存在: {}", account_id))?;
+    if let Some(expected) = expected {
+        if account.id != expected.id
+            || account.reward_claim_status != expected.reward_claim_status
+            || account.reward_window_end_at != expected.reward_window_end_at
+            || account.reward_status_updated_at != expected.reward_status_updated_at
+        {
+            // 比较与保存持有同一把锁，其他领取/查询不能在两者之间插入写入。
+            return Ok(account);
+        }
+    }
+    account.reward_claim_status = claim_status;
+    account.reward_window_end_at = window_end_at;
+    account.reward_status_updated_at = Some(now_ts());
+    save_account_file(&account)?;
+    refresh_summary(&mut index, &account);
+    save_account_index(&index)?;
+    Ok(account)
+}
+
 pub fn update_quota_query_error(
     account_id: &str,
     message: Option<String>,
@@ -500,8 +533,26 @@ pub(crate) fn update_account_usage(
         account.credits_remaining = remaining;
         account.credits_usage_percent = percent;
         account.usage_updated_at = Some(now_ts());
+        // 网页额度是独立缓存；正常用量查询成功后失效，随后可用已验证的网页会话重拉。
+        account.web_quota_raw = None;
+        account.web_quota_updated_at = None;
         account.quota_query_last_error = None;
         account.quota_query_last_error_at = None;
+    })?
+    .ok_or_else(|| format!("Qoder 账号不存在: {}", account_id))
+}
+
+pub fn update_account_web_quota(
+    account_id: &str,
+    web_quota: Value,
+    cookie: Option<String>,
+) -> Result<QoderAccount, String> {
+    update_account_metadata(account_id, |account| {
+        account.web_quota_raw = Some(web_quota);
+        account.web_quota_updated_at = Some(now_ts());
+        if let Some(c) = cookie {
+            account.web_session_cookie = Some(c);
+        }
     })?
     .ok_or_else(|| format!("Qoder 账号不存在: {}", account_id))
 }
@@ -1047,6 +1098,7 @@ fn snapshot_to_account(snapshot: QoderSnapshot, existing: Option<&QoderAccount>)
         ..Default::default()
     })
     .is_some();
+    let usage_refreshed = snapshot.credit_usage_raw.is_some();
     let (credits_used, credits_total, credits_remaining, credits_usage_percent) =
         extract_snapshot_credits(&snapshot);
 
@@ -1079,6 +1131,9 @@ fn snapshot_to_account(snapshot: QoderSnapshot, existing: Option<&QoderAccount>)
             existing.and_then(|item| item.usage_updated_at)
         },
         tags: existing.and_then(|item| item.tags.clone()),
+        reward_claim_status: existing.and_then(|item| item.reward_claim_status.clone()),
+        reward_window_end_at: existing.and_then(|item| item.reward_window_end_at),
+        reward_status_updated_at: existing.and_then(|item| item.reward_status_updated_at),
         auth_user_info_raw: snapshot
             .user_info_raw
             .or_else(|| existing.and_then(|item| item.auth_user_info_raw.clone())),
@@ -1094,6 +1149,17 @@ fn snapshot_to_account(snapshot: QoderSnapshot, existing: Option<&QoderAccount>)
         auth_credit_usage_raw: snapshot
             .credit_usage_raw
             .or_else(|| existing.and_then(|item| item.auth_credit_usage_raw.clone())),
+        web_session_cookie: existing.and_then(|item| item.web_session_cookie.clone()),
+        web_quota_raw: if usage_refreshed {
+            None
+        } else {
+            existing.and_then(|item| item.web_quota_raw.clone())
+        },
+        web_quota_updated_at: if usage_refreshed {
+            None
+        } else {
+            existing.and_then(|item| item.web_quota_updated_at)
+        },
         created_at: existing.map(|item| item.created_at).unwrap_or(now),
         last_used: now,
     }
@@ -2729,11 +2795,12 @@ mod tests {
     }
 
     #[test]
-    fn usage_and_plan_update_preserves_latest_credentials_and_tags() {
+    fn usage_and_plan_update_preserves_latest_credentials_and_reward_state() {
         let _lock = crate::modules::test_support::env_lock().lock().expect("lock env");
         let _guard = DataDirGuard::new("usage-preserves-app-session");
         let mut latest = variant_test_account("active", Some("qoder_app"));
         latest.auth_user_info_raw = Some(serde_json::json!({"token": "newer-session"}));
+        latest.reward_claim_status = Some("CLAIMED".to_string());
         latest.tags = Some(vec!["keep".to_string()]);
         upsert_account_record(latest.clone()).unwrap();
         let updated = update_account_usage("active", serde_json::json!({
@@ -2743,6 +2810,7 @@ mod tests {
             "planTierName": "Enterprise VPC"
         }))).unwrap();
         assert_eq!(updated.auth_user_info_raw, latest.auth_user_info_raw);
+        assert_eq!(updated.reward_claim_status, latest.reward_claim_status);
         assert_eq!(updated.tags, latest.tags);
         assert_eq!(updated.credits_remaining, Some(160.0));
         assert_eq!(updated.plan_type.as_deref(), Some("Enterprise VPC"));
@@ -2758,14 +2826,17 @@ mod tests {
     }
 
     #[test]
-    fn refreshed_app_usage_replaces_stale_plan() {
+    fn refreshed_app_usage_replaces_stale_plan_and_invalidates_web_cache() {
         let _lock = crate::modules::test_support::env_lock().lock().expect("lock env");
         let _guard = DataDirGuard::new("app-plan-and-web-cache");
         let mut account = variant_test_account("active", Some("qoder_app"));
         account.plan_type = Some("Free".to_string());
         account.auth_user_plan_raw = Some(serde_json::json!({"planTierName": "Free"}));
         account.auth_user_info_raw = Some(serde_json::json!({"userTag": "FREE", "token": "synthetic-token"}));
+        account.web_quota_raw = Some(serde_json::json!({"account_quota": {"limit_value": 300, "used_value": 10}}));
+        account.web_quota_updated_at = Some(1);
         account.usage_updated_at = Some(2);
+        account.web_session_cookie = Some("session=synthetic-cookie".to_string());
         upsert_account_record(account.clone()).unwrap();
 
         let updated = update_account_usage("active", serde_json::json!({
@@ -2774,6 +2845,9 @@ mod tests {
         assert_eq!(updated.plan_type.as_deref(), Some("personal_professional"));
         assert_eq!(updated.auth_user_plan_raw, None);
         assert_eq!(updated.auth_user_info_raw, account.auth_user_info_raw);
+        assert_eq!(updated.web_quota_raw, None);
+        assert_eq!(updated.web_quota_updated_at, None);
+        assert_eq!(updated.web_session_cookie, account.web_session_cookie);
 
         let from_snapshot = snapshot_to_account(QoderSnapshot {
             variant: Some("qoder_app".to_string()),
@@ -2783,12 +2857,15 @@ mod tests {
         }, Some(&account));
         assert_eq!(from_snapshot.plan_type.as_deref(), Some("personal_professional"));
         assert_eq!(from_snapshot.auth_user_plan_raw, None);
+        assert_eq!(from_snapshot.web_quota_raw, None);
 
         // 查询失败不提供新用量；保留缓存和原更新时间，而不是伪装成刷新成功。
         let no_new_usage = snapshot_to_account(QoderSnapshot {
             variant: Some("qoder_app".to_string()),
             ..Default::default()
         }, Some(&account));
+        assert_eq!(no_new_usage.web_quota_raw, account.web_quota_raw);
+        assert_eq!(no_new_usage.web_quota_updated_at, account.web_quota_updated_at);
         assert_eq!(no_new_usage.usage_updated_at, account.usage_updated_at);
     }
 
@@ -2999,6 +3076,12 @@ mod tests {
                 serde_json::json!({"plan_tier_name": "Pro", "user_type": "personal"}),
             ),
             auth_credit_usage_raw: Some(serde_json::json!({"displayMode": "qoder"})),
+            reward_claim_status: None,
+            reward_window_end_at: None,
+            reward_status_updated_at: None,
+            web_session_cookie: None,
+            web_quota_raw: None,
+            web_quota_updated_at: None,
             created_at: 1,
             last_used: 1,
         }
@@ -3107,6 +3190,12 @@ mod tests {
             auth_user_info_raw: None,
             auth_user_plan_raw: None,
             auth_credit_usage_raw: None,
+            reward_claim_status: None,
+            reward_window_end_at: None,
+            reward_status_updated_at: None,
+            web_session_cookie: None,
+            web_quota_raw: None,
+            web_quota_updated_at: None,
             created_at: 1,
             last_used: 1,
         }

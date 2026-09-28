@@ -107,6 +107,7 @@ pub mod qoder_oauth;
 pub mod qoder_official_login;
 pub mod qoder_platform_paths;
 pub mod qoder_variant;
+pub mod qoder_webview;
 pub mod quota;
 pub mod quota_cache;
 pub mod remote_config;

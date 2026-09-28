@@ -141,6 +141,7 @@
     },
     "confirm": "确认",
     "cancel": "取消",
+    "stop": "停止",
     "cancelling": "正在取消...",
     "cancelled": "已取消",
     "save": "保存",
@@ -6570,6 +6571,32 @@
     },
     "empty": {
       "desc": "点击“添加账号”，可使用授权登录、本机导入或 JSON 导入。"
+    },
+    "claimReward": {
+      "buttonTitle": "领取每日 100 积分",
+      "batchTitle": "一键领取每日 100 积分",
+      "modalTitle": "一键领取每日 100 积分",
+      "modalDesc": "批量为选中的账号领取每日活动 100 积分奖励。",
+      "selectAll": "全选",
+      "selectedCount": "已选 {{selected}} / {{total}} 个账号",
+      "claiming": "领取中...",
+      "statusPending": "待领取",
+      "statusAlreadyClaimed": "今日已领",
+      "statusFailed": "失败",
+      "batchFinishedSummary": "完成：{{success}} 成功，{{already}} 已领，{{failed}} 失败",
+      "reclaim": "重新领取",
+      "startClaim": "一键领取",
+      "claimSuccess": "账号 {{email}} 成功领取 {{amount}} 积分！",
+      "alreadyClaimed": "账号 {{email}} 今日已领取过积分",
+      "claimFailed": "账号 {{email}} 领取积分失败：{{error}}",
+      "badgeClaimable": "可领100",
+      "badgeClaimed": "已领100",
+      "statusClaimableTip": "今日可领 100 积分",
+      "statusClaimedTip": "今日已领取 100 积分",
+      "statusNone": "无活动",
+      "badgeNone": "无活动",
+      "statusNoneTip": "账号暂无活动/不可领取",
+      "alreadyClaimedTip": "今日已领取 100 积分"
     }
   },
   "zcode": {

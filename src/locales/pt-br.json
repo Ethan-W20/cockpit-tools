@@ -141,6 +141,7 @@
     },
     "confirm": "Confirmar",
     "cancel": "Cancelar",
+    "stop": "Parar",
     "cancelling": "Cancelando...",
     "cancelled": "Cancelado",
     "save": "Salvar",
@@ -6328,6 +6329,32 @@
     },
     "empty": {
       "desc": "Clique em \"Adicionar conta\" para usar login de autenticação, importação local ou importação JSON."
+    },
+    "claimReward": {
+      "buttonTitle": "Resgatar 100 créditos diários",
+      "batchTitle": "Resgate em lote de 100 créditos diários",
+      "modalTitle": "Resgatar 100 Créditos Diários",
+      "modalDesc": "Resgate em lote a recompensa diária de 100 créditos para as contas selecionadas.",
+      "selectAll": "Selecionar tudo",
+      "selectedCount": "{{selected}} de {{total}} contas selecionadas",
+      "claiming": "Resgatando...",
+      "statusPending": "Pendente",
+      "statusAlreadyClaimed": "Já resgatado hoje",
+      "statusFailed": "Falhou",
+      "batchFinishedSummary": "Concluído: {{success}} com sucesso, {{already}} já resgatados, {{failed}} com falha",
+      "reclaim": "Resgatar novamente",
+      "startClaim": "Resgatar tudo",
+      "claimSuccess": "A conta {{email}} resgatou com sucesso {{amount}} créditos!",
+      "alreadyClaimed": "A conta {{email}} já resgatou os créditos hoje",
+      "claimFailed": "Falha ao resgatar créditos para a conta {{email}}: {{error}}",
+      "badgeClaimable": "100 disponíveis",
+      "badgeClaimed": "100 resgatados",
+      "statusClaimableTip": "Os 100 créditos diários estão disponíveis hoje",
+      "statusClaimedTip": "Os 100 créditos diários já foram resgatados hoje",
+      "statusNone": "Sem campanha",
+      "badgeNone": "Sem campanha",
+      "statusNoneTip": "Nenhuma campanha ativa para esta conta",
+      "alreadyClaimedTip": "Os 100 créditos diários já foram resgatados hoje"
     }
   },
   "trae": {
